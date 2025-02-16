@@ -1,4 +1,6 @@
+import { Task } from './task';
+
 export type TableColumn = {
-  id: string;
+  id: keyof Task;
   name: string;
 };
