@@ -3,16 +3,16 @@ import { TableHeaderData } from './table-header-data';
 
 export function TableView() {
   return (
-    <table className="w-full border-collapse">
-      <thead>
-        <tr>
+    <div className="w-full max-w-3xl mx-auto overflow-x-auto">
+      <table className="w-full min-w-[800px] border-collapse">
+        <thead>
           <TableHeaderData />
-        </tr>
-      </thead>
+        </thead>
 
-      <tbody>
-        <TableBodyData />
-      </tbody>
-    </table>
+        <tbody>
+          <TableBodyData />
+        </tbody>
+      </table>
+    </div>
   );
 }

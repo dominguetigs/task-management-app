@@ -1,11 +1,15 @@
 import { create } from 'zustand';
 
+import { Task } from '@/types';
+
 type SheetStore = {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  data: Task | undefined;
+  onOpenChange: (open: boolean, data?: Task) => void;
 };
 
 export const useSheet = create<SheetStore>()(set => ({
   open: false,
-  onOpenChange: open => set({ open }),
+  data: undefined,
+  onOpenChange: (open, data) => set({ open, data }),
 }));

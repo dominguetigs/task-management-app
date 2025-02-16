@@ -3,10 +3,6 @@ export function setToLocalstorage<T>(key: string, value: T): void {
 }
 
 export function getFromLocalstorage<T>(key: string): T | null {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
   const storedItem = localStorage.getItem(key);
 
   if (!storedItem) {

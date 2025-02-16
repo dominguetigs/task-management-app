@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,35 +41,62 @@ const formSchema = z.object({
   priority: z.string(),
 });
 
+const FORM_DEFAULT_VALUES: Task = {
+  id: -1,
+  title: '',
+  status: 'not_started',
+  priority: 'none',
+};
+
 export function TaskForm() {
-  const { open, onOpenChange } = useSheet();
+  const { open, data, onOpenChange } = useSheet();
   const addTask = useTasks(state => state.addTask);
+  const updateTask = useTasks(state => state.updateTask);
+  const isEditing = !!data;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      id: -1,
-      title: '',
-      status: 'not_started',
-      priority: 'none',
-    },
+    defaultValues: FORM_DEFAULT_VALUES,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addTask(values as Task);
+    if (isEditing) {
+      updateTask(values as Task);
+    } else {
+      addTask(values as Task);
+    }
+
+    closeSheet();
   }
 
   function closeSheet() {
-    form.reset();
-    form.clearErrors();
+    updateForm(FORM_DEFAULT_VALUES);
     onOpenChange(false);
   }
+
+  const updateForm = useCallback(
+    (data: Task) => {
+      form.reset({
+        id: data.id || FORM_DEFAULT_VALUES.id,
+        title: data.title || FORM_DEFAULT_VALUES.title,
+        status: data.status || FORM_DEFAULT_VALUES.status,
+        priority: data.priority || FORM_DEFAULT_VALUES.priority,
+      });
+    },
+    [form],
+  );
+
+  useEffect(() => {
+    if (data) {
+      updateForm(data);
+    }
+  }, [data, form, updateForm]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
         <SheetHeader className="mb-6">
-          <SheetTitle>Create task</SheetTitle>
+          <SheetTitle>{isEditing ? 'Edit' : 'Create'} task</SheetTitle>
         </SheetHeader>
 
         <Separator className="-ml-6 mb-6 w-[calc(100%+3rem)]" />
@@ -150,7 +178,7 @@ export function TaskForm() {
             <Separator className="-ml-6 my-6 w-[calc(100%+3rem)]" />
 
             <div className="flex items-center justify-end gap-4">
-              <Button variant="outline" type="submit" onClick={() => closeSheet()}>
+              <Button type="button" variant="outline" onClick={() => closeSheet()}>
                 Cancel
               </Button>
               <Button type="submit">Save</Button>

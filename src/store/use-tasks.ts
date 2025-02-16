@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 
 import { retrieveTasks } from '@/services';
@@ -19,12 +21,18 @@ export const useTasks = create<TaskStore>()(set => ({
       const newTask = { ...task, id: maxId + 1 };
       const updatedTasks = [...state.tasks, newTask];
       setToLocalstorage('tasks', updatedTasks);
-
       return { tasks: updatedTasks };
     }),
-  removeTask: task => set(state => ({ tasks: state.tasks.filter(t => t.id !== task.id) })),
+  removeTask: task =>
+    set(state => {
+      const updatedTasks = state.tasks.filter(t => t.id !== task.id);
+      setToLocalstorage('tasks', updatedTasks);
+      return { tasks: updatedTasks };
+    }),
   updateTask: task =>
-    set(state => ({
-      tasks: state.tasks.map(t => (t.id === task.id ? task : t)),
-    })),
+    set(state => {
+      const updatedTasks = state.tasks.map(t => (t.id === task.id ? task : t));
+      setToLocalstorage('tasks', updatedTasks);
+      return { tasks: updatedTasks };
+    }),
 }));
