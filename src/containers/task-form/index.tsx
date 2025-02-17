@@ -26,11 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { RemoveTaskAction } from '@/components/remove-task-action';
 
 import { useSheet, useTasks } from '@/store';
 
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { Task, TaskPriority, TaskStatus } from '@/types';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   id: z.number(),
@@ -177,11 +179,17 @@ export function TaskForm() {
 
             <Separator className="-ml-6 my-6 w-[calc(100%+3rem)]" />
 
-            <div className="flex items-center justify-end gap-4">
-              <Button type="button" variant="outline" onClick={() => closeSheet()}>
-                Cancel
-              </Button>
-              <Button type="submit">Save</Button>
+            <div
+              className={cn('flex items-center justify-end gap-4', isEditing && 'justify-between')}
+            >
+              {isEditing && <RemoveTaskAction task={data as Task} onRemoved={() => closeSheet()} />}
+
+              <div className="flex items-center justify-between gap-4">
+                <Button type="button" variant="outline" onClick={() => closeSheet()}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </div>
             </div>
           </form>
         </Form>

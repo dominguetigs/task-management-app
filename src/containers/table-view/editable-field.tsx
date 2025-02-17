@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useTasks } from '@/store';
 import { Task, TaskPriority, TaskStatus } from '@/types';
@@ -22,6 +22,7 @@ interface EditableFieldProps {
 }
 
 export function EditableField({ task, field }: EditableFieldProps) {
+  const tasks = useTasks(state => state.tasks);
   const updateTask = useTasks(state => state.updateTask);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(task[field]);
@@ -35,13 +36,21 @@ export function EditableField({ task, field }: EditableFieldProps) {
     setIsEditing(false);
   }
 
+  useEffect(() => {
+    const filteredTask = tasks.find(t => t.id === task.id);
+
+    if (filteredTask) {
+      setValue(filteredTask[field]);
+    }
+  }, [tasks, task, field]);
+
   return (
     <td
       className="border border-slate-200 px-2 py-1 text-xs cursor-pointer"
       onClick={() => setIsEditing(true)}
     >
       {isEditing ? (
-        <div className="![&>svg]:hidden">
+        <div>
           {field === 'title' && (
             <Input
               mode="minimal"
