@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useTasks } from '@/store';
-import { Task, TaskPriority, TaskStatus } from '@/types';
+import { TableColumn, Task, TaskPriority, TaskStatus } from '@/types';
 import { Status } from '@/components/status';
 import { Priority } from '@/components/priority';
 import { Input } from '@/components/ui/input';
@@ -15,24 +15,25 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
+import { Switch } from '@/components/ui/switch';
 
 interface EditableFieldProps {
   task: Task;
-  field: keyof Task;
+  column: TableColumn;
 }
 
-export function EditableField({ task, field }: EditableFieldProps) {
+export function EditableField({ task, column }: EditableFieldProps) {
   const tasks = useTasks(state => state.tasks);
   const updateTask = useTasks(state => state.updateTask);
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(task[field]);
+  const [value, setValue] = useState(task[column.id]);
 
-  function handleSave(value: string | TaskStatus | TaskPriority): void {
-    if (!value) {
+  function handleSave(value: string | number | boolean | TaskStatus | TaskPriority): void {
+    if (!value && typeof value !== 'boolean') {
       return;
     }
 
-    updateTask({ ...task, [field]: value });
+    updateTask({ ...task, [column.id]: value });
     setIsEditing(false);
   }
 
@@ -40,9 +41,23 @@ export function EditableField({ task, field }: EditableFieldProps) {
     const filteredTask = tasks.find(t => t.id === task.id);
 
     if (filteredTask) {
-      setValue(filteredTask[field]);
+      setValue(filteredTask[column.id]);
     }
-  }, [tasks, task, field]);
+  }, [tasks, task, column]);
+
+  if (column.type === 'boolean') {
+    return (
+      <td className="border border-slate-200 px-2 py-1 text-xs cursor-pointer">
+        <Switch
+          checked={value as boolean}
+          onCheckedChange={checked => {
+            setValue(checked);
+            handleSave(checked);
+          }}
+        />
+      </td>
+    );
+  }
 
   return (
     <td
@@ -51,10 +66,11 @@ export function EditableField({ task, field }: EditableFieldProps) {
     >
       {isEditing ? (
         <div>
-          {field === 'title' && (
+          {column.type === 'text' && (
             <Input
+              type="text"
               mode="minimal"
-              value={value}
+              value={value as string}
               onBlur={() => handleSave(value as string)}
               onChange={e => setValue(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave(value as string)}
@@ -62,7 +78,19 @@ export function EditableField({ task, field }: EditableFieldProps) {
             />
           )}
 
-          {field === 'status' && (
+          {column.type === 'number' && (
+            <Input
+              type="number"
+              mode="minimal"
+              value={value as number}
+              onBlur={() => handleSave(Number(value) as number)}
+              onChange={e => setValue(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSave(Number(value) as number)}
+              autoFocus
+            />
+          )}
+
+          {column.type === 'status' && (
             <Select
               defaultOpen
               value={value as TaskStatus}
@@ -73,7 +101,7 @@ export function EditableField({ task, field }: EditableFieldProps) {
               onOpenChange={setIsEditing}
             >
               <SelectTrigger mode="minimal">
-                <SelectValue placeholder={`Select ${field}`} />
+                <SelectValue placeholder={`Select ${column.name}`} />
               </SelectTrigger>
               <SelectContent>
                 {Object.keys(TASK_STATUS).map(key => (
@@ -85,7 +113,7 @@ export function EditableField({ task, field }: EditableFieldProps) {
             </Select>
           )}
 
-          {field === 'priority' && (
+          {column.type === 'priority' && (
             <Select
               defaultOpen
               value={value as TaskPriority}
@@ -96,7 +124,7 @@ export function EditableField({ task, field }: EditableFieldProps) {
               onOpenChange={setIsEditing}
             >
               <SelectTrigger mode="minimal">
-                <SelectValue placeholder={`Select ${field}`} />
+                <SelectValue placeholder={`Select ${column.name}`} />
               </SelectTrigger>
               <SelectContent>
                 {Object.keys(TASK_PRIORITY).map(key => (
@@ -110,9 +138,9 @@ export function EditableField({ task, field }: EditableFieldProps) {
         </div>
       ) : (
         <>
-          {field === 'title' && task.title}
-          {field === 'status' && <Status type={task.status} />}
-          {field === 'priority' && <Priority type={task.priority} />}
+          {(column.type === 'text' || column.type === 'number') && task[column.id]}
+          {column.type === 'status' && <Status type={task.status} />}
+          {column.type === 'priority' && <Priority type={task.priority} />}
         </>
       )}
     </td>

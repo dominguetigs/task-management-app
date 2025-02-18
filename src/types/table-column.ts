@@ -1,6 +1,9 @@
-import { Task } from './task';
+import { CustomField, CustomFieldTypes } from './custom-field';
 
-export type TableColumn = {
-  id: keyof Task;
-  name: string;
+export type TableFixedColumnType = 'priority' | 'status';
+
+export type TableColumnType = CustomFieldTypes | TableFixedColumnType;
+
+export type TableColumn = Omit<CustomField, 'type'> & {
+  type: TableColumnType;
 };

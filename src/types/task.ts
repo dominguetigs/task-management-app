@@ -7,4 +7,5 @@ export type Task = {
   title: string;
   status: TaskStatus;
   priority: TaskPriority;
+  [key: string]: string | number | boolean | null | undefined;
 };

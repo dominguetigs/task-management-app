@@ -57,17 +57,17 @@ export function TableBodyData() {
           return (
             <React.Fragment key={key}>
               {column.id === 'id' ? (
-                <td className="border border-slate-200 px-2 py-1 text-xs font-semibold">
+                <td className="w-20 border border-slate-200 px-2 py-1 text-xs font-semibold">
                   {task.id}
                 </td>
               ) : (
-                <EditableField field={column.id} task={task} />
+                <EditableField column={column} task={task} />
               )}
             </React.Fragment>
           );
         })}
 
-        <td className="border border-slate-200 px-2 py-1 text-center text-xs">
+        <td className="w-30 border border-slate-200 px-2 py-1 text-center text-xs">
           <UpdateTaskAction task={task} />
           <RemoveTaskAction task={task} variant="icon" />
         </td>

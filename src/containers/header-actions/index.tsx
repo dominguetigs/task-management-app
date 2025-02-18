@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useSheet } from '@/store';
+import { useTaskFormPanel } from '@/store';
 
 import { Filter } from './filter';
 
 export function HeaderActions() {
-  const onOpenChange = useSheet(state => state.onOpenChange);
+  const onOpenChange = useTaskFormPanel(state => state.onOpenChange);
 
   return (
     <>

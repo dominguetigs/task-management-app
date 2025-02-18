@@ -2,7 +2,7 @@
 
 import { Pencil } from 'lucide-react';
 
-import { useSheet } from '@/store';
+import { useTaskFormPanel } from '@/store';
 import { Task } from '@/types';
 
 interface UpdateTaskActionProps {
@@ -10,7 +10,7 @@ interface UpdateTaskActionProps {
 }
 
 export function UpdateTaskAction({ task }: UpdateTaskActionProps) {
-  const onOpenChange = useSheet(state => state.onOpenChange);
+  const onOpenChange = useTaskFormPanel(state => state.onOpenChange);
 
   return (
     <button

@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 
-import { DEFAULT_PAGINATION, DEFAULT_SORT, DEFAULT_TABLE_COLUMNS } from '@/constants';
-import { Filter, Pagination, Sort, TableColumn, Task } from '@/types';
-import { filterTasks, sortTasks } from '@/utils';
+import { DEFAULT_PAGINATION, DEFAULT_SORT } from '@/constants';
+import { CustomField, Filter, Pagination, Sort, TableColumn, Task } from '@/types';
+import { filterTasks, setToLocalstorage, sortTasks } from '@/utils';
+import { retrieveFilters, retrieveTableColumns } from '@/services';
 
 type TableStore = {
   columns: TableColumn[];
@@ -13,41 +14,69 @@ type TableStore = {
 
   addFilter: (filter: Filter) => void;
   updateFilter: (filter: Filter) => void;
-  removeFilter: (filter: Filter) => void;
+  removeFilter: (filterKey: keyof Task) => void;
   resetFilters: () => void;
   setSort: (sort: Sort | null) => void;
   setPagination: (pagination: Pagination) => void;
 
-  addColumn: (column: TableColumn) => void;
-  updateColumn: (column: TableColumn) => void;
-  removeColumn: (column: TableColumn) => void;
+  addColumn: (column: CustomField) => void;
+  updateColumn: (column: CustomField) => void;
+  removeColumn: (columnId: string) => void;
 
   updateRows: (tasks: Task[]) => void;
 };
 
 export const useTable = create<TableStore>()(set => ({
-  columns: DEFAULT_TABLE_COLUMNS,
+  columns: retrieveTableColumns(),
   rows: [],
-  filters: [],
+  filters: retrieveFilters(),
   sort: DEFAULT_SORT,
   pagination: DEFAULT_PAGINATION,
 
-  addFilter: filter => set(state => ({ filters: [...state.filters, filter] })),
+  addFilter: filter =>
+    set(state => {
+      const updatedFilters = [...state.filters, filter];
+      setToLocalstorage('filters', updatedFilters);
+      return { filters: updatedFilters };
+    }),
   updateFilter: filter =>
-    set(state => ({ filters: state.filters.map(f => (f.key === filter.key ? filter : f)) })),
-  removeFilter: filter =>
-    set(state => ({ filters: state.filters.filter(f => f.key !== filter.key) })),
-  resetFilters: () => set(() => ({ filters: [] })),
+    set(state => {
+      const updatedFilters = state.filters.map(f => (f.key === filter.key ? filter : f));
+      setToLocalstorage('filters', updatedFilters);
+      return { filters: updatedFilters };
+    }),
+  removeFilter: filterKey =>
+    set(state => {
+      const updatedFilters = state.filters.filter(f => f.key !== filterKey);
+      setToLocalstorage('filters', updatedFilters);
+      return { filters: updatedFilters };
+    }),
+  resetFilters: () =>
+    set(() => {
+      setToLocalstorage('filters', []);
+      return { filters: [] };
+    }),
   setSort: (sort = DEFAULT_SORT) => set(() => ({ sort })),
   setPagination: (pagination = DEFAULT_PAGINATION) => set(() => ({ pagination })),
 
-  addColumn: column => set(state => ({ columns: [...state.columns, column] })),
+  addColumn: column =>
+    set(state => {
+      const updatedColumns = [...state.columns, column];
+      setToLocalstorage('table-columns', updatedColumns);
+      return { columns: updatedColumns };
+    }),
   updateColumn: column =>
-    set(state => ({
-      columns: state.columns.map(c => (c.id === column.id ? column : c)),
-    })),
-  removeColumn: column =>
-    set(state => ({ columns: state.columns.filter(c => c.id !== column.id) })),
+    set(state => {
+      const updatedColumns = state.columns.map(c => (c.id === column.id ? column : c));
+      setToLocalstorage('table-columns', updatedColumns);
+      return { columns: updatedColumns };
+    }),
+  removeColumn: columnId =>
+    set(state => {
+      const updatedColumns = state.columns.filter(c => c.id !== columnId);
+      setToLocalstorage('table-columns', updatedColumns);
+      return { columns: updatedColumns };
+    }),
 
   updateRows: rows =>
     set(state => {

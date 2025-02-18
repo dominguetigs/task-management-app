@@ -13,22 +13,30 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useTasks } from '@/store';
-import { Task } from '@/types';
+import { useTable, useTasks } from '@/store';
+import { CustomField } from '@/types';
 
+import { Icon } from './icon';
 import { Button } from './ui/button';
 
 interface RemoveTaskActionProps {
-  task: Task;
-  variant?: 'default' | 'icon';
+  customField: CustomField;
+  variant?: 'default' | 'minimal';
   onRemoved?: () => void;
 }
 
-export function RemoveTaskAction({ task, variant = 'default', onRemoved }: RemoveTaskActionProps) {
-  const removeTask = useTasks(state => state.removeTask);
+export function RemoveCustomFieldAction({
+  customField,
+  variant = 'default',
+  onRemoved,
+}: RemoveTaskActionProps) {
+  const { removeColumn, removeFilter } = useTable();
+  const removeCustomField = useTasks(state => state.removeCustomField);
 
-  function handleRemoveTask(): void {
-    removeTask(task.id);
+  function handleRemoveCustomField(): void {
+    removeColumn(customField.id);
+    removeCustomField(customField.id);
+    removeFilter(customField.id);
 
     if (onRemoved) {
       onRemoved();
@@ -40,15 +48,16 @@ export function RemoveTaskAction({ task, variant = 'default', onRemoved }: Remov
       <AlertDialogTrigger asChild>
         <div className="inline-block">
           {variant === 'default' && (
+            <div className="flex items-center gap-2">
+              <Icon name="trash" size={16} />
+              <span>Remove</span>
+            </div>
+          )}
+
+          {variant === 'minimal' && (
             <Button type="button" className="cursor-pointer" variant="destructive" size="icon">
               <Trash />
             </Button>
-          )}
-
-          {variant === 'icon' && (
-            <button type="button" className="p-1 rounded hover:bg-red-200 cursor-pointer">
-              <Trash className="w-3 h-3 text-red-600" />
-            </button>
           )}
         </div>
       </AlertDialogTrigger>
@@ -56,12 +65,12 @@ export function RemoveTaskAction({ task, variant = 'default', onRemoved }: Remov
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your task.
+            This action cannot be undone. This will permanently delete your custom field.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleRemoveTask}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleRemoveCustomField}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

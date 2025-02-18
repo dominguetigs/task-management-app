@@ -13,82 +13,69 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Priority } from '@/components/priority';
-import { Status } from '@/components/status';
+import { Icon } from '@/components/icon';
 
-import { TABLE_COLUMN_ICONS, TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { useTable } from '@/store';
-import { Task, TaskPriority, TaskStatus } from '@/types';
+import { Task } from '@/types';
 
-import { FilterSelection } from './filter-selection';
 import { FilterActionButton } from './filter-action-button';
-
-const FILTER_LABELS: Record<keyof Omit<Task, 'id'>, string> = {
-  priority: 'Priority is:',
-  status: 'Status is:',
-  title: 'Title contains:',
-};
-
-const FILTER_OPTIONS: Record<keyof Omit<Task, 'id'>, TaskPriority[] | TaskStatus[] | null> = {
-  priority: Object.keys(TASK_PRIORITY) as TaskPriority[],
-  status: Object.keys(TASK_STATUS) as TaskStatus[],
-  title: null,
-};
+import { FilterSelection } from './filter-selection';
 
 export function Filter() {
-  const filters = useTable(state => state.filters);
-  const addFilter = useTable(state => state.addFilter);
-  const resetFilters = useTable(state => state.resetFilters);
+  const {
+    columns: tableColumns,
+    filters,
+    addFilter,
+    updateFilter,
+    removeFilter,
+    resetFilters,
+  } = useTable();
 
-  const [selectedFilters, setSelectedFilters] = useState<Array<keyof Omit<Task, 'id'>>>([]);
-  const filterOptions: Array<keyof Omit<Task, 'id'>> = ['title', 'status', 'priority'];
+  const [selectedFields, setSelectedFields] = useState<Array<keyof Omit<Task, 'id'>>>([]);
+  const [defaultOpen, setDefaultOpen] = useState<Record<string, boolean>>({});
+  const filterOptions = tableColumns.filter(column => column.id !== 'id');
 
-  function handleFilterOptionVisibility(filter: keyof Omit<Task, 'id'>): boolean {
-    return selectedFilters.includes(filter);
+  function isFilterOptionVisible(field: keyof Omit<Task, 'id'>): boolean {
+    return selectedFields.includes(field);
   }
 
-  function handleSelectFilter(filter: keyof Omit<Task, 'id'>): void {
-    setSelectedFilters([...selectedFilters, filter]);
-    addFilter({ key: filter, value: '' });
+  function handleSelectField(field: keyof Omit<Task, 'id'>): void {
+    setSelectedFields([...selectedFields, field]);
+    addFilter({ key: field, value: '' });
+    setDefaultOpen({ [field]: true });
   }
 
   useEffect(() => {
-    setSelectedFilters(filters.map(filter => filter.key) as Array<keyof Omit<Task, 'id'>>);
+    setSelectedFields(filters.map(filter => filter.key as keyof Omit<Task, 'id'>));
   }, [filters]);
 
   return (
     <div className="flex flex-wrap items-center gap-2 my-2">
-      {selectedFilters.map(filter => (
+      {selectedFields.map(field => (
         <FilterSelection
-          key={filter}
-          filter={filter}
-          label={FILTER_LABELS[filter]}
-          options={FILTER_OPTIONS[filter]}
-          renderOption={value =>
-            filter === 'status' ? (
-              <Status type={value as TaskStatus} />
-            ) : filter === 'priority' ? (
-              <Priority type={value as TaskPriority} />
-            ) : (
-              value
-            )
-          }
+          defaultOpen={!!defaultOpen?.[field]}
+          key={field}
+          field={field}
+          filters={filters}
+          tableColumns={tableColumns}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
         />
       ))}
 
-      {selectedFilters.length === 3 && (
+      {selectedFields.length === tableColumns.length - 1 && (
         <FilterActionButton
           icon={Trash}
           label="Clear filters"
           onClick={() => {
-            setSelectedFilters([]);
+            setSelectedFields([]);
             resetFilters();
           }}
         />
       )}
 
       <DropdownMenu>
-        {filterOptions.length !== selectedFilters.length && (
+        {filterOptions.length !== selectedFields.length && (
           <DropdownMenuTrigger asChild>
             <div>
               <FilterActionButton icon={Plus} label="Add filter" />
@@ -96,19 +83,20 @@ export function Filter() {
           </DropdownMenuTrigger>
         )}
 
-        <DropdownMenuContent className="w-56" align="start">
+        <DropdownMenuContent className="w-auto" align="start">
           <DropdownMenuLabel>Filters</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            {filterOptions.map(filter => (
+            {filterOptions.map(({ id, name, icon }) => (
               <DropdownMenuItem
-                className={handleFilterOptionVisibility(filter) ? 'hidden' : ''}
-                key={filter}
-                onClick={() => handleSelectFilter(filter)}
+                className={isFilterOptionVisible(id) ? 'hidden' : ''}
+                key={id}
+                onClick={() => handleSelectField(id)}
               >
-                {TABLE_COLUMN_ICONS[filter] &&
-                  React.createElement(TABLE_COLUMN_ICONS[filter], { className: 'w-3 h-3' })}
-                {filter}
+                <div className="flex items-center gap-2">
+                  <Icon name={icon} size={20} />
+                  {name}
+                </div>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>

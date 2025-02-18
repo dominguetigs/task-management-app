@@ -7,7 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Status } from '@/components/status';
 import { Priority } from '@/components/priority';
 import { Separator } from '@/components/ui/separator';
@@ -28,7 +34,7 @@ import {
 } from '@/components/ui/select';
 import { RemoveTaskAction } from '@/components/remove-task-action';
 
-import { useSheet, useTasks } from '@/store';
+import { useTaskFormPanel, useTasks } from '@/store';
 
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { Task, TaskPriority, TaskStatus } from '@/types';
@@ -51,7 +57,7 @@ const FORM_DEFAULT_VALUES: Task = {
 };
 
 export function TaskForm() {
-  const { open, data, onOpenChange } = useSheet();
+  const { open, data, onOpenChange } = useTaskFormPanel();
   const addTask = useTasks(state => state.addTask);
   const updateTask = useTasks(state => state.updateTask);
   const isEditing = !!data;
@@ -97,11 +103,15 @@ export function TaskForm() {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <SheetHeader className="mb-6">
+        <SheetHeader>
           <SheetTitle>{isEditing ? 'Edit' : 'Create'} task</SheetTitle>
         </SheetHeader>
 
-        <Separator className="-ml-6 mb-6 w-[calc(100%+3rem)]" />
+        <SheetDescription>
+          {isEditing ? 'Update the task details' : 'Fill in the details of the new task'}
+        </SheetDescription>
+
+        <Separator className="-ml-6 my-6 w-[calc(100%+3rem)]" />
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -110,7 +120,7 @@ export function TaskForm() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Title*</FormLabel>
                   <FormControl>
                     <Input placeholder="Fix login redirect" {...field} />
                   </FormControl>
