@@ -30,7 +30,10 @@ export function TableBodyData() {
   if (tableRows.length === 0) {
     return (
       <tr>
-        <td className="border border-slate-200 p-1 text-center" colSpan={5}>
+        <td
+          className="border border-slate-200 px-2 py-1 text-left"
+          colSpan={tableColumns.length + 2}
+        >
           No tasks found.
         </td>
       </tr>
@@ -47,7 +50,7 @@ export function TableBodyData() {
         key={taskKey}
         className="[&>td]:first:border-l-transparent [&>td]:last:border-r-transparent"
       >
-        <td className="border border-slate-200 p-1 text-center">
+        <td className="p-1 border border-slate-200 text-center sticky -left-[1px] bg-white z-10">
           <Checkbox />
         </td>
 

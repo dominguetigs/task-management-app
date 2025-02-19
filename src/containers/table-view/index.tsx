@@ -5,20 +5,21 @@ import { TablePagination } from './table-pagination';
 
 export function TableView() {
   return (
-    <>
-      <div className="w-full max-w-[100%] overflow-x-auto">
-        <table className="w-full min-w-[100%] border-collapse">
+    <div className="flex flex-col w-full">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full min-w-4xl max-w-7xl border-collapse mx-auto">
           <thead>
             <TableHeaderData />
           </thead>
-
           <tbody>
             <TableBodyData />
           </tbody>
         </table>
       </div>
+
       <TablePagination />
+
       <TableCustomFieldForm />
-    </>
+    </div>
   );
 }

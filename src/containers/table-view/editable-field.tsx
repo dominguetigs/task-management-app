@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
 
 interface EditableFieldProps {
   task: Task;
@@ -47,7 +48,7 @@ export function EditableField({ task, column }: EditableFieldProps) {
 
   if (column.type === 'boolean') {
     return (
-      <td className="border border-slate-200 px-2 py-1 text-xs cursor-pointer">
+      <td className="w-30 border border-slate-200 px-2 py-1 text-xs cursor-pointer">
         <Switch
           checked={value as boolean}
           onCheckedChange={checked => {
@@ -61,7 +62,10 @@ export function EditableField({ task, column }: EditableFieldProps) {
 
   return (
     <td
-      className="border border-slate-200 px-2 py-1 text-xs cursor-pointer"
+      className={cn(
+        'border min-w-40 max-w-40 border-slate-200 px-2 py-1 text-xs cursor-pointer',
+        column.type === 'text' && 'max-w-40',
+      )}
       onClick={() => setIsEditing(true)}
     >
       {isEditing ? (
@@ -138,7 +142,12 @@ export function EditableField({ task, column }: EditableFieldProps) {
         </div>
       ) : (
         <>
-          {(column.type === 'text' || column.type === 'number') && task[column.id]}
+          <p
+            className="overflow-hidden text-ellipsis truncate"
+            title={column.type === 'text' ? (task[column.id] as string) : ''}
+          >
+            {(column.type === 'text' || column.type === 'number') && task[column.id]}
+          </p>
           {column.type === 'status' && <Status type={task.status} />}
           {column.type === 'priority' && <Priority type={task.priority} />}
         </>

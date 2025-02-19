@@ -32,7 +32,7 @@ export function TableHeaderData() {
 
   return (
     <tr>
-      <th scope="col" className="p-1 text-center">
+      <th scope="col" className="p-1 text-center sticky -left-[1px] bg-white z-10 shadow-sm">
         {tableRows.length > 0 && <Checkbox />}
       </th>
 

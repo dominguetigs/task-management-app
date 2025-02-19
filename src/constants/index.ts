@@ -1,4 +1,4 @@
-export * from './custom-boolean-field';
+export * from './custom-boolean-field-options';
 export * from './custom-field-types';
 export * from './default-pagination';
 export * from './default-sort';
