@@ -29,11 +29,14 @@ export function Filter() {
     updateFilter,
     removeFilter,
     resetFilters,
+    selectedRows,
+    clearSelection,
   } = useTable();
 
   const [selectedFields, setSelectedFields] = useState<Array<keyof Omit<Task, 'id'>>>([]);
   const [defaultOpen, setDefaultOpen] = useState<Record<string, boolean>>({});
   const filterOptions = tableColumns.filter(column => column.id !== 'id');
+  const hasSomeSelectedRows = selectedRows?.size > 0;
 
   function isFilterOptionVisible(field: keyof Omit<Task, 'id'>): boolean {
     return selectedFields.includes(field);
@@ -76,7 +79,14 @@ export function Filter() {
 
       <DropdownMenu>
         {filterOptions.length !== selectedFields.length && (
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger
+            asChild
+            onPointerDown={() => {
+              if (hasSomeSelectedRows) {
+                clearSelection();
+              }
+            }}
+          >
             <div>
               <FilterActionButton icon={Plus} label="Add filter" />
             </div>
