@@ -2,12 +2,16 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useTaskFormPanel } from '@/store';
+import { useTable, useTaskFormPanel } from '@/store';
 
 import { Filter } from './filter';
+import { Selection } from './selection';
 
 export function HeaderActions() {
   const onOpenChange = useTaskFormPanel(state => state.onOpenChange);
+  const selectedRows = useTable(state => state.selectedRows);
+
+  const hasSomeSelection = Object.values(selectedRows).some(selected => selected.size > 0);
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -21,6 +25,8 @@ export function HeaderActions() {
       <Separator className="mt-4" />
 
       <Filter />
+
+      {hasSomeSelection && <Selection />}
     </div>
   );
 }

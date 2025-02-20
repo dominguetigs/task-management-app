@@ -1,6 +1,7 @@
 import {
   AArrowDown,
   AArrowUp,
+  Check,
   EllipsisVertical,
   Hash,
   Hourglass,
@@ -16,6 +17,7 @@ import { IconNames } from '@/types';
 export const ICON_MAP: Record<IconNames, LucideIcon> = {
   'a-arrow-down': AArrowDown,
   'a-arrow-up': AArrowUp,
+  check: Check,
   text: Text,
   hash: Hash,
   hourglass: Hourglass,

@@ -9,6 +9,7 @@ import { useTable, useTasks } from '@/store';
 import { paginateTasks } from '@/utils';
 
 import { EditableField } from './editable-field';
+import { cn } from '@/lib/utils';
 
 export function TableBodyData() {
   const {
@@ -18,6 +19,8 @@ export function TableBodyData() {
     filters,
     sort,
     pagination,
+    selectedRows,
+    toggleRowSelection,
   } = useTable();
   const tasks = useTasks(state => state.tasks);
 
@@ -44,14 +47,23 @@ export function TableBodyData() {
 
   return paginatedTasks.map((task, index) => {
     const taskKey = `task-key-${task.id}-${index}`;
+    const isSelected = selectedRows[pagination.page]?.has(task.id);
 
     return (
       <tr
         key={taskKey}
-        className="[&>td]:first:border-l-transparent [&>td]:last:border-r-transparent"
+        className={cn(
+          '[&>td]:first:border-l-transparent [&>td]:last:border-r-transparent',
+          isSelected && 'bg-slate-100',
+        )}
       >
-        <td className="p-1 border border-slate-200 text-center sticky -left-[1px] bg-white z-10">
-          <Checkbox />
+        <td
+          className={cn(
+            'p-1 border border-slate-200 text-center sticky -left-[1px] bg-white z-10',
+            isSelected && 'bg-slate-100',
+          )}
+        >
+          <Checkbox checked={isSelected} onCheckedChange={() => toggleRowSelection(task.id)} />
         </td>
 
         {tableColumns.map((column, index) => {
@@ -72,7 +84,7 @@ export function TableBodyData() {
 
         <td className="w-30 border border-slate-200 px-2 py-1 text-center text-xs">
           <UpdateTaskAction task={task} />
-          <RemoveTaskAction task={task} variant="icon" />
+          <RemoveTaskAction taskId={task.id} variant="icon" />
         </td>
       </tr>
     );

@@ -11,6 +11,11 @@ type TableStore = {
   filters: Filter[];
   sort: Sort | null;
   pagination: Pagination;
+  selectedRows: Record<number, Set<number>>;
+
+  toggleRowSelection: (taskId: number) => void;
+  toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) => void;
+  clearSelection: () => void;
 
   addFilter: (filter: Filter) => void;
   updateFilter: (filter: Filter) => void;
@@ -32,6 +37,47 @@ export const useTable = create<TableStore>()(set => ({
   filters: retrieveFilters(),
   sort: DEFAULT_SORT,
   pagination: DEFAULT_PAGINATION,
+  selectedRows: {},
+
+  toggleRowSelection: taskId =>
+    set(state => {
+      const { page } = state.pagination;
+      const updatedSelection = new Set(state.selectedRows[page] || []);
+      if (updatedSelection.has(taskId)) {
+        updatedSelection.delete(taskId);
+      } else {
+        updatedSelection.add(taskId);
+      }
+
+      return {
+        selectedRows: { ...state.selectedRows, [page]: updatedSelection },
+      };
+    }),
+
+  toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) =>
+    set(state => {
+      const { page } = state.pagination;
+
+      if (isIndeterminate) {
+        return {
+          selectedRows: {
+            ...state.selectedRows,
+            [page]: new Set<number>(),
+          },
+        };
+      }
+
+      const allSelected = state.selectedRows[page]?.size === taskIds.length;
+
+      return {
+        selectedRows: {
+          ...state.selectedRows,
+          [page]: allSelected ? new Set<number>() : new Set<number>(taskIds),
+        },
+      };
+    }),
+
+  clearSelection: () => set(() => ({ selectedRows: {} })),
 
   addFilter: filter =>
     set(state => {

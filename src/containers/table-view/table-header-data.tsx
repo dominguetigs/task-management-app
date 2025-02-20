@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Plus } from 'lucide-react';
+import { ArrowUp, Plus } from 'lucide-react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Icon } from '@/components/icon';
@@ -17,10 +17,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RemoveCustomFieldAction } from '@/components/remove-custom-field-action';
+import { paginateTasks } from '@/utils';
 
 export function TableHeaderData() {
   const onOpenChange = useTableCustomColumnFormPanel(state => state.onOpenChange);
-  const { columns: tableColumns, rows: tableRows, sort, setSort } = useTable();
+  const {
+    columns: tableColumns,
+    rows: tableRows,
+    sort,
+    setSort,
+    pagination,
+    selectedRows,
+    toggleSelectAll,
+  } = useTable();
 
   function handleSort(columnId: keyof Task) {
     if (sort?.key === columnId) {
@@ -30,10 +39,20 @@ export function TableHeaderData() {
     }
   }
 
+  const taskIds = paginateTasks(tableRows, pagination).map(task => task.id);
+  const selectedCount = selectedRows[pagination.page]?.size || 0;
+  const isAllSelected = selectedCount === taskIds.length;
+  const isIndeterminate = selectedCount > 0 && selectedCount < taskIds.length;
+
   return (
     <tr>
       <th scope="col" className="p-1 text-center sticky -left-[1px] bg-white z-10 shadow-sm">
-        {tableRows.length > 0 && <Checkbox />}
+        {tableRows.length > 0 && (
+          <Checkbox
+            checked={isIndeterminate ? 'indeterminate' : isAllSelected}
+            onCheckedChange={() => toggleSelectAll(taskIds, isIndeterminate)}
+          />
+        )}
       </th>
 
       {tableColumns.map(column => (
@@ -51,15 +70,15 @@ export function TableHeaderData() {
               onClick={() => handleSort(column.id)}
               className="text-slate-400 hover:text-slate-700 transition cursor-pointer"
             >
-              {sort && sort.key === column.id ? (
-                sort.order === 'asc' ? (
-                  <ArrowUp className="w-4 h-4 text-slate-700" />
-                ) : (
-                  <ArrowDown className="w-4 h-4 text-slate-700" />
-                )
-              ) : (
-                <ArrowUp className="w-4 h-4 opacity-50 group-hover:opacity-100" />
-              )}
+              <ArrowUp
+                className={`w-4 h-4 text-slate-700 transition-transform duration-200 ${
+                  sort && sort.key === column.id
+                    ? sort.order === 'desc'
+                      ? 'rotate-180'
+                      : ''
+                    : 'opacity-50 group-hover:opacity-100'
+                }`}
+              />
             </button>
 
             {column.canInteract && (
