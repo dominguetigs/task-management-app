@@ -24,26 +24,71 @@ type CustomFieldState = {
   removeCustomField: (fieldId: string) => void;
 };
 
-type TaskStore = TaskState & CustomFieldState;
+type UndoRedoState = {
+  undoHistory: Task[][];
+  redoHistory: Task[][];
+  undo: () => void;
+  redo: () => void;
+};
+
+type TaskStore = TaskState & CustomFieldState & UndoRedoState;
 
 export const useTasks = create<TaskStore>()(set => ({
   tasks: retrieveTasks(),
+  undoHistory: [],
+  redoHistory: [],
+
+  undo: () =>
+    set(state => {
+      const previousTasks = state.undoHistory.pop();
+
+      if (previousTasks) {
+        return {
+          tasks: updateLocalStorage('tasks', previousTasks),
+          redoHistory: [...state.redoHistory, state.tasks],
+        };
+      }
+
+      return state;
+    }),
+  redo: () =>
+    set(state => {
+      const previousTasks = state.redoHistory.pop();
+
+      if (previousTasks) {
+        return {
+          tasks: updateLocalStorage('tasks', previousTasks),
+          undoHistory: [...state.undoHistory, state.tasks],
+        };
+      }
+
+      return state;
+    }),
 
   addTask: task =>
     set(state => {
       const newTask = { ...task, id: (state.tasks.at(-1)?.id || 0) + 1 };
       const updatedTasks = [...state.tasks, newTask];
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
   removeTask: taskId =>
     set(state => {
       const updatedTasks = state.tasks.filter(task => task.id !== taskId);
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
   updateTask: task =>
     set(state => {
       const updatedTasks = state.tasks.map(taskItem => (taskItem.id === task.id ? task : taskItem));
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
 
   updateMultipleTasks: (
@@ -56,13 +101,19 @@ export const useTasks = create<TaskStore>()(set => ({
         taskIds.includes(task.id) ? { ...task, [field]: value } : task,
       );
 
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
   removeMultipleTasks: (selectedTaskIds: number[]) =>
     set(state => {
       const updatedTasks = state.tasks.filter(task => !selectedTaskIds.includes(task.id));
 
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
 
   addCustomField: field =>
@@ -74,7 +125,10 @@ export const useTasks = create<TaskStore>()(set => ({
         };
       });
 
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
   removeCustomField: fieldId =>
     set(state => {
@@ -84,6 +138,9 @@ export const useTasks = create<TaskStore>()(set => ({
         return updatedTask;
       });
 
-      return { tasks: updateLocalStorage('tasks', updatedTasks) };
+      return {
+        undoHistory: [...state.undoHistory, state.tasks],
+        tasks: updateLocalStorage('tasks', updatedTasks),
+      };
     }),
 }));

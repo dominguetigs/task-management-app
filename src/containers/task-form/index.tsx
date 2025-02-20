@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -39,6 +41,7 @@ import { useTaskFormPanel, useTasks } from '@/store';
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { Task, TaskPriority, TaskStatus } from '@/types';
 import { cn } from '@/lib/utils';
+import { toastRedo, toastUndo } from '@/utils';
 
 const formSchema = z.object({
   id: z.number(),
@@ -58,8 +61,8 @@ const FORM_DEFAULT_VALUES: Task = {
 
 export function TaskForm() {
   const { open, data, onOpenChange } = useTaskFormPanel();
-  const addTask = useTasks(state => state.addTask);
-  const updateTask = useTasks(state => state.updateTask);
+  const { addTask, updateTask, undo, redo } = useTasks();
+
   const isEditing = !!data;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,6 +78,19 @@ export function TaskForm() {
     }
 
     closeSheet();
+
+    toastUndo(isEditing ? 'Task updated successfully' : 'Task created successfully', null, () => {
+      undo();
+
+      if (isEditing) {
+        toast('Task update undone');
+      } else {
+        toastRedo('Task creation undone', null, () => {
+          redo();
+          toast('Task creation redone');
+        });
+      }
+    });
   }
 
   function closeSheet() {
