@@ -2,6 +2,8 @@
 
 import { Fragment } from 'react';
 
+import { toast } from 'sonner';
+
 import {
   Menubar,
   MenubarContent,
@@ -18,6 +20,7 @@ import { Status } from '@/components/status';
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { useTable, useTasks } from '@/store';
 import { TaskPriority, TaskStatus } from '@/types';
+import { toastUndo } from '@/utils';
 
 interface SelectionMenuProps {
   selectedRowsIds: number[];
@@ -25,11 +28,25 @@ interface SelectionMenuProps {
 
 export function SelectionMenu({ selectedRowsIds }: SelectionMenuProps) {
   const { columns, clearSelection } = useTable();
-  const updateMultipleTasks = useTasks(state => state.updateMultipleTasks);
+  const { updateMultipleTasks, undo } = useTasks();
 
   const menuBarOptions = columns.filter(
     column => column.id === 'status' || column.id === 'priority',
   );
+
+  function handleUpdateMultipleTasks(
+    selectedRowsIds: number[],
+    optionId: string,
+    key: string,
+  ): void {
+    updateMultipleTasks(selectedRowsIds, optionId, key);
+    clearSelection();
+
+    toastUndo(`${selectedRowsIds.length > 1 ? 'Tasks' : 'Task'} updated successfully`, null, () => {
+      undo();
+      toast(`${selectedRowsIds.length > 1 ? 'Tasks' : 'Task'} update undone`);
+    });
+  }
 
   return (
     <Menubar>
@@ -51,10 +68,7 @@ export function SelectionMenu({ selectedRowsIds }: SelectionMenuProps) {
                   {Object.keys(menuBarItemOptions).map(key => (
                     <Fragment key={key}>
                       <MenubarItem
-                        onClick={() => {
-                          updateMultipleTasks(selectedRowsIds, option.id, key);
-                          clearSelection();
-                        }}
+                        onClick={() => handleUpdateMultipleTasks(selectedRowsIds, option.id, key)}
                       >
                         {option.id === 'status' && <Status type={key as TaskStatus} />}
                         {option.id === 'priority' && <Priority type={key as TaskPriority} />}

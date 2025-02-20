@@ -2,6 +2,8 @@
 
 import { Trash } from 'lucide-react';
 
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +17,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useTable, useTasks } from '@/store';
 import { CustomField } from '@/types';
+import { toastUndo } from '@/utils';
 
 import { Icon } from './icon';
 import { Button } from './ui/button';
@@ -31,7 +34,7 @@ export function RemoveCustomFieldAction({
   onRemoved,
 }: RemoveTaskActionProps) {
   const { removeColumn, removeFilter } = useTable();
-  const removeCustomField = useTasks(state => state.removeCustomField);
+  const { removeCustomField, undo } = useTasks();
 
   function handleRemoveCustomField(): void {
     removeColumn(customField.id);
@@ -41,6 +44,11 @@ export function RemoveCustomFieldAction({
     if (onRemoved) {
       onRemoved();
     }
+
+    toastUndo('Custom field removed successfully', null, () => {
+      undo();
+      toast('Custom field remove undone');
+    });
   }
 
   return (

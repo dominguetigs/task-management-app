@@ -2,6 +2,8 @@
 
 import { Trash } from 'lucide-react';
 
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,9 +16,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useTasks } from '@/store';
+import { cn } from '@/lib/utils';
+import { toastRedo, toastUndo } from '@/utils';
 
 import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
 
 interface RemoveTaskActionProps {
   taskId: number | number[];
@@ -31,7 +34,7 @@ export function RemoveTaskAction({
   className,
   onRemoved,
 }: RemoveTaskActionProps) {
-  const { removeTask, removeMultipleTasks } = useTasks();
+  const { removeTask, removeMultipleTasks, undo, redo } = useTasks();
 
   const isMultiple = Array.isArray(taskId);
 
@@ -45,6 +48,23 @@ export function RemoveTaskAction({
     if (onRemoved) {
       onRemoved();
     }
+
+    toastUndo(
+      `${isMultiple && taskId.length > 1 ? 'Tasks' : 'Task'} removed successfully`,
+      null,
+      () => {
+        undo();
+
+        if (!isMultiple || (isMultiple && taskId.length === 1)) {
+          toastRedo('Task remove undone', null, () => {
+            redo();
+            toast('Task remove redone');
+          });
+        } else {
+          toast('Tasks remove undone');
+        }
+      },
+    );
   }
 
   return (
