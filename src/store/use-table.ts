@@ -59,11 +59,14 @@ export const useTable = create<TableStore>()(set => ({
       }
 
       const allSelected = taskIds.every(id => state.selectedRows.has(id));
-      const updatedSelection = allSelected
-        ? new Set<number>()
-        : new Set([...state.selectedRows, ...taskIds]);
 
-      return { selectedRows: updatedSelection };
+      if (allSelected) {
+        taskIds.forEach(id => state.selectedRows.delete(id));
+      } else {
+        taskIds.forEach(id => state.selectedRows.add(id));
+      }
+
+      return { selectedRows: new Set([...state.selectedRows]) };
     }),
 
   clearSelection: () => set(() => ({ selectedRows: new Set<number>() })),
