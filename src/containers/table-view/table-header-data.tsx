@@ -116,7 +116,7 @@ export function TableHeaderData() {
       >
         <button
           type="button"
-          className="flex items-center gap-1 cursor-pointer"
+          className="flex items-center gap-1 w-30 cursor-pointer"
           onClick={() => onOpenChange(true)}
         >
           <Plus className="w-4 h-4" />
