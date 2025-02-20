@@ -103,7 +103,7 @@ export function TaskForm() {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <SheetHeader>
+        <SheetHeader className="text-left">
           <SheetTitle>{isEditing ? 'Edit' : 'Create'} task</SheetTitle>
         </SheetHeader>
 
@@ -129,7 +129,7 @@ export function TaskForm() {
               )}
             />
 
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
               <FormField
                 control={form.control}
                 name="status"
@@ -192,7 +192,7 @@ export function TaskForm() {
             <div
               className={cn('flex items-center justify-end gap-4', isEditing && 'justify-between')}
             >
-              {isEditing && <RemoveTaskAction task={data as Task} onRemoved={() => closeSheet()} />}
+              {isEditing && <RemoveTaskAction taskId={data.id} onRemoved={() => closeSheet()} />}
 
               <div className="flex items-center justify-between gap-4">
                 <Button type="button" variant="outline" onClick={() => closeSheet()}>

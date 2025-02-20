@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { RemoveCustomFieldAction } from '@/components/remove-custom-field-action';
 import {
   Sheet,
   SheetContent,
@@ -39,7 +40,6 @@ import { CUSTOM_FIELD_TYPES } from '@/constants';
 import { useTableCustomColumnFormPanel, useTable, useTasks } from '@/store';
 import { CustomField } from '@/types';
 import { UUID } from '@/utils';
-import { RemoveCustomFieldAction } from '@/components/remove-custom-field-action';
 
 const FORM_DEFAULT_VALUES: CustomField = {
   id: '',
@@ -144,7 +144,7 @@ export function TableCustomFieldForm() {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <SheetHeader>
+        <SheetHeader className="text-left">
           <SheetTitle>{isEditing ? 'Edit' : 'Create'} custom field</SheetTitle>
         </SheetHeader>
 

@@ -64,7 +64,13 @@ export function TableHeaderData() {
           <div className="flex items-center gap-1">
             <Icon name={column.icon} size={16} />
 
-            <span>{column.name}</span>
+            <span
+              className="truncate max-w-40 overflow-hidden whitespace-nowrap"
+              title={column.name}
+            >
+              {column.name}
+            </span>
+
             <button
               type="button"
               onClick={() => handleSort(column.id)}
@@ -83,7 +89,7 @@ export function TableHeaderData() {
 
             {column.canInteract && (
               <DropdownMenu>
-                <DropdownMenuTrigger className="ml-auto" asChild>
+                <DropdownMenuTrigger className="ml-auto pl-6" asChild>
                   <div>
                     <Icon name="ellipsis-vertical" size={16} />
                   </div>

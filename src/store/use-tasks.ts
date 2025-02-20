@@ -37,12 +37,12 @@ export const useTasks = create<TaskStore>()(set => ({
     }),
   removeTask: taskId =>
     set(state => {
-      const updatedTasks = state.tasks.filter(t => t.id !== taskId);
+      const updatedTasks = state.tasks.filter(task => task.id !== taskId);
       return { tasks: updateLocalStorage('tasks', updatedTasks) };
     }),
   updateTask: task =>
     set(state => {
-      const updatedTasks = state.tasks.map(t => (t.id === task.id ? task : t));
+      const updatedTasks = state.tasks.map(taskItem => (taskItem.id === task.id ? task : taskItem));
       return { tasks: updateLocalStorage('tasks', updatedTasks) };
     }),
 
@@ -67,9 +67,9 @@ export const useTasks = create<TaskStore>()(set => ({
 
   addCustomField: field =>
     set(state => {
-      const updatedTasks = state.tasks.map(t => {
+      const updatedTasks = state.tasks.map(task => {
         return {
-          ...t,
+          ...task,
           [field.id]: getDefaultValueByFieldType(field.type),
         };
       });
@@ -78,8 +78,8 @@ export const useTasks = create<TaskStore>()(set => ({
     }),
   removeCustomField: fieldId =>
     set(state => {
-      const updatedTasks = state.tasks.map(t => {
-        const updatedTask = { ...t };
+      const updatedTasks = state.tasks.map(task => {
+        const updatedTask = { ...task };
         delete updatedTask[fieldId];
         return updatedTask;
       });
