@@ -40,7 +40,7 @@ export function TableHeaderData() {
   }
 
   const taskIds = paginateTasks(tableRows, pagination).map(task => task.id);
-  const selectedCount = selectedRows[pagination.page]?.size || 0;
+  const selectedCount = Array.from(selectedRows).filter(id => taskIds.includes(id)).length ?? 0;
   const isAllSelected = selectedCount === taskIds.length;
   const isIndeterminate = selectedCount > 0 && selectedCount < taskIds.length;
 

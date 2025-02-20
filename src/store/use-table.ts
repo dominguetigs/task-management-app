@@ -11,7 +11,7 @@ type TableStore = {
   filters: Filter[];
   sort: Sort | null;
   pagination: Pagination;
-  selectedRows: Record<number, Set<number>>;
+  selectedRows: Set<number>;
 
   toggleRowSelection: (taskId: number) => void;
   toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) => void;
@@ -37,47 +37,36 @@ export const useTable = create<TableStore>()(set => ({
   filters: retrieveFilters(),
   sort: DEFAULT_SORT,
   pagination: DEFAULT_PAGINATION,
-  selectedRows: {},
+  selectedRows: new Set<number>(),
 
   toggleRowSelection: taskId =>
     set(state => {
-      const { page } = state.pagination;
-      const updatedSelection = new Set(state.selectedRows[page] || []);
+      const updatedSelection = new Set(state.selectedRows);
       if (updatedSelection.has(taskId)) {
         updatedSelection.delete(taskId);
       } else {
         updatedSelection.add(taskId);
       }
 
-      return {
-        selectedRows: { ...state.selectedRows, [page]: updatedSelection },
-      };
+      return { selectedRows: updatedSelection };
     }),
 
   toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) =>
     set(state => {
-      const { page } = state.pagination;
-
       if (isIndeterminate) {
-        return {
-          selectedRows: {
-            ...state.selectedRows,
-            [page]: new Set<number>(),
-          },
-        };
+        taskIds.forEach(id => state.selectedRows.delete(id));
+        return { selectedRows: new Set([...state.selectedRows]) };
       }
 
-      const allSelected = state.selectedRows[page]?.size === taskIds.length;
+      const allSelected = taskIds.every(id => state.selectedRows.has(id));
+      const updatedSelection = allSelected
+        ? new Set<number>()
+        : new Set([...state.selectedRows, ...taskIds]);
 
-      return {
-        selectedRows: {
-          ...state.selectedRows,
-          [page]: allSelected ? new Set<number>() : new Set<number>(taskIds),
-        },
-      };
+      return { selectedRows: updatedSelection };
     }),
 
-  clearSelection: () => set(() => ({ selectedRows: {} })),
+  clearSelection: () => set(() => ({ selectedRows: new Set<number>() })),
 
   addFilter: filter =>
     set(state => {

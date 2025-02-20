@@ -11,7 +11,7 @@ export function HeaderActions() {
   const onOpenChange = useTaskFormPanel(state => state.onOpenChange);
   const selectedRows = useTable(state => state.selectedRows);
 
-  const hasSomeSelection = Object.values(selectedRows).some(selected => selected.size > 0);
+  const hasSomeSelection = selectedRows?.size > 0;
 
   return (
     <div className="w-full max-w-7xl mx-auto">

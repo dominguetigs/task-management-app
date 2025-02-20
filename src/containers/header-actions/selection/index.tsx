@@ -9,12 +9,8 @@ import { SelectionMenu } from './selection-menu';
 export function Selection() {
   const { selectedRows } = useTable();
 
-  const selectedRowsIds = Object.values(selectedRows).reduce((acc, selected) => {
-    const selectedRows = Array.from(selected).map(selectedRow => +selectedRow);
-    return [...acc, ...selectedRows];
-  }, [] as number[]);
-
-  const selectedCount = selectedRowsIds.length;
+  const selectedCount = selectedRows?.size ?? 0;
+  const selectedRowsIds = Array.from(selectedRows);
 
   return (
     <div className="flex items-center flex-wrap gap-2 my-4">

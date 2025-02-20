@@ -47,7 +47,7 @@ export function TableBodyData() {
 
   return paginatedTasks.map((task, index) => {
     const taskKey = `task-key-${task.id}-${index}`;
-    const isSelected = selectedRows[pagination.page]?.has(task.id);
+    const isSelected = selectedRows?.has(task.id);
 
     return (
       <tr
