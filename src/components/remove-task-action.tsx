@@ -68,7 +68,7 @@ export function RemoveTaskAction({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete
+            This action cannot be undone. This will permanently delete{' '}
             {isMultiple ? 'these tasks' : 'this task'}.
           </AlertDialogDescription>
         </AlertDialogHeader>

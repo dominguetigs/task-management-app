@@ -5,6 +5,7 @@ import { useTable } from '@/store';
 import { RemoveAction } from './remove-action';
 import { SelectionButton } from './selection-button';
 import { SelectionMenu } from './selection-menu';
+import { SelectionAllButton } from './selection-all-button';
 
 export function Selection() {
   const { selectedRows } = useTable();
@@ -22,6 +23,8 @@ export function Selection() {
       <SelectionMenu selectedRowsIds={selectedRowsIds} />
 
       <RemoveAction className="hidden sm:block" selectedRowsIds={selectedRowsIds} />
+
+      <SelectionAllButton />
     </div>
   );
 }

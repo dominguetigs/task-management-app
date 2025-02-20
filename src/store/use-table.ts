@@ -12,9 +12,10 @@ type TableStore = {
   sort: Sort | null;
   pagination: Pagination;
   selectedRows: Set<number>;
+  selectedAllRows: boolean;
 
   toggleRowSelection: (taskId: number) => void;
-  toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) => void;
+  toggleSelectAll: (taskIds: number[], isIndeterminate?: boolean) => void;
   clearSelection: () => void;
 
   addFilter: (filter: Filter) => void;
@@ -38,6 +39,7 @@ export const useTable = create<TableStore>()(set => ({
   sort: DEFAULT_SORT,
   pagination: DEFAULT_PAGINATION,
   selectedRows: new Set<number>(),
+  selectedAllRows: false,
 
   toggleRowSelection: taskId =>
     set(state => {
@@ -51,8 +53,22 @@ export const useTable = create<TableStore>()(set => ({
       return { selectedRows: updatedSelection };
     }),
 
-  toggleSelectAll: (taskIds: number[], isIndeterminate: boolean) =>
+  toggleSelectAll: (taskIds: number[], isIndeterminate = false) =>
     set(state => {
+      const isSelectAll = taskIds.length === state.rows.length;
+
+      if (isSelectAll) {
+        if (!state.selectedAllRows) {
+          const updatedSelectedRows = new Set<number>();
+          taskIds.forEach(id => updatedSelectedRows.add(id));
+          return { selectedRows: updatedSelectedRows, selectedAllRows: true };
+        }
+      }
+
+      if (state.selectedAllRows) {
+        return { selectedRows: new Set<number>(), selectedAllRows: false };
+      }
+
       if (isIndeterminate) {
         taskIds.forEach(id => state.selectedRows.delete(id));
         return { selectedRows: new Set([...state.selectedRows]) };
@@ -69,7 +85,7 @@ export const useTable = create<TableStore>()(set => ({
       return { selectedRows: new Set([...state.selectedRows]) };
     }),
 
-  clearSelection: () => set(() => ({ selectedRows: new Set<number>() })),
+  clearSelection: () => set(() => ({ selectedRows: new Set<number>(), selectedAllRows: false })),
 
   addFilter: filter =>
     set(state => {
