@@ -41,7 +41,7 @@ import {
 import { CUSTOM_FIELD_TYPES } from '@/constants';
 import { useTableCustomColumnFormPanel, useTable, useTasks } from '@/store';
 import { CustomField } from '@/types';
-import { toastRedo, toastUndo, UUID } from '@/utils';
+import { UUID } from '@/utils';
 
 const FORM_DEFAULT_VALUES: CustomField = {
   id: '',
@@ -54,7 +54,7 @@ const FORM_DEFAULT_VALUES: CustomField = {
 export function TableCustomFieldForm() {
   const { open, data, onOpenChange } = useTableCustomColumnFormPanel();
   const { addColumn, updateColumn, removeColumn, removeFilter, columns } = useTable();
-  const { addCustomField, removeCustomField, undo, redo } = useTasks();
+  const { addCustomField, removeCustomField } = useTasks();
   const isEditing = !!data;
 
   const formSchema = z.object({
@@ -98,22 +98,7 @@ export function TableCustomFieldForm() {
 
     closeSheet();
 
-    toastUndo(
-      isEditing ? 'Custom field updated successfully' : 'Custom field created successfully',
-      null,
-      () => {
-        undo();
-
-        if (isEditing) {
-          toast('Custom field update undone');
-        } else {
-          toastRedo('Custom field creation undone', null, () => {
-            redo();
-            toast('Custom field creation redone');
-          });
-        }
-      },
-    );
+    toast(isEditing ? 'Custom field updated successfully' : 'Custom field created successfully');
   }
 
   function handleCreate(customField: CustomField) {
