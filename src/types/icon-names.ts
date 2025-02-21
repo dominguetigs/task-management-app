@@ -8,4 +8,6 @@ export type IconNames =
   | 'text'
   | 'ellipsis-vertical'
   | 'trash'
-  | 'pencil';
+  | 'pencil'
+  | 'search'
+  | 'x';

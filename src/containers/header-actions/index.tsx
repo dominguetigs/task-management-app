@@ -6,6 +6,7 @@ import { useTable, useTaskFormPanel } from '@/store';
 
 import { Filter } from './filter';
 import { Selection } from './selection';
+import Search from './search';
 
 export function HeaderActions() {
   const onOpenChange = useTaskFormPanel(state => state.onOpenChange);
@@ -15,11 +16,15 @@ export function HeaderActions() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <header className="flex items-center justify-between gap-2">
+      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">Tasks</h1>
-        <Button className="block ml-auto" onClick={() => onOpenChange(true)}>
-          New
-        </Button>
+
+        <div className="flex items-center gap-2 ml-auto">
+          <Search />
+          <Button className="block ml-auto" onClick={() => onOpenChange(true)}>
+            New
+          </Button>
+        </div>
       </header>
 
       <Separator className="mt-4" />

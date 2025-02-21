@@ -21,6 +21,7 @@ export function TableBodyData() {
     pagination,
     selectedRows,
     toggleRowSelection,
+    search,
   } = useTable();
   const tasks = useTasks(state => state.tasks);
 
@@ -28,7 +29,7 @@ export function TableBodyData() {
     if (tasks) {
       updateRows(tasks);
     }
-  }, [tasks, updateRows, filters, sort]);
+  }, [tasks, updateRows, filters, sort, search]);
 
   if (tableRows.length === 0) {
     return (

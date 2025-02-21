@@ -8,8 +8,10 @@ import {
   LucideIcon,
   Pencil,
   Pin,
+  Search,
   Text,
   Trash,
+  X,
 } from 'lucide-react';
 
 import { IconNames } from '@/types';
@@ -25,4 +27,6 @@ export const ICON_MAP: Record<IconNames, LucideIcon> = {
   trash: Trash,
   pencil: Pencil,
   'ellipsis-vertical': EllipsisVertical,
+  search: Search,
+  x: X,
 };

@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { DEFAULT_PAGINATION, DEFAULT_SORT } from '@/constants';
 import { retrieveFilters, retrieveTableColumns } from '@/services';
 import { CustomField, Filter, Pagination, Sort, TableColumn, Task } from '@/types';
-import { filterTasks, sortTasks, updateLocalStorage } from '@/utils';
+import { filterArrayByString, filterTasks, sortTasks, updateLocalStorage } from '@/utils';
 
 type SelectionState = {
   selectedRows: Set<number>;
@@ -43,12 +43,18 @@ type SortState = {
   setSort: (sort: Sort | null) => void;
 };
 
+type SearchState = {
+  search: string;
+  setSearch: (search: string) => void;
+};
+
 type TableStore = SelectionState &
   FilterState &
   ColumnState &
   RowState &
   PaginationState &
-  SortState;
+  SortState &
+  SearchState;
 
 export const useTable = create<TableStore>(set => ({
   columns: retrieveTableColumns(),
@@ -58,6 +64,9 @@ export const useTable = create<TableStore>(set => ({
   pagination: DEFAULT_PAGINATION,
   selectedRows: new Set<number>(),
   selectedAllRows: false,
+  search: '',
+
+  setSearch: search => set(() => ({ search: search.trim() })),
 
   toggleRowSelection: taskId =>
     set(state => {
@@ -142,6 +151,7 @@ export const useTable = create<TableStore>(set => ({
     set(state => {
       const filteredTasks = filterTasks(rows, state.filters);
       const sortedTasks = state.sort ? sortTasks(filteredTasks, state.sort) : filteredTasks;
-      return { rows: sortedTasks };
+      const searchTasks = filterArrayByString(sortedTasks, state.search);
+      return { rows: searchTasks };
     }),
 }));
