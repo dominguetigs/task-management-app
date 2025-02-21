@@ -5,14 +5,7 @@ export function filterTasks(data: Task[], filters: Filter[]): Task[] {
     filters.every(({ key, value }) => {
       const fieldValue = task[key as keyof Task];
 
-      if (
-        value === undefined ||
-        value === null ||
-        value === '' ||
-        fieldValue === undefined ||
-        fieldValue === null ||
-        fieldValue === ''
-      ) {
+      if (value === undefined || value === null || value === '') {
         return true;
       }
 

@@ -5,7 +5,7 @@ interface NumberFilterProps {
   updateFilter: (value: number) => void;
 }
 
-export function NumberFilter({ value, updateFilter }: NumberFilterProps) {
+export function NumberFilter({ value = 0, updateFilter }: NumberFilterProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     const numericValue = e.target.value.replace(/\D/g, '');
     updateFilter(numericValue ? Number(numericValue) : 0);

@@ -45,6 +45,11 @@ export function FilterSelection({
   const selectedFilter = filters.find(f => f.key === field);
   const tableColumn = tableColumns.find(column => column.id === field);
 
+  const hasSelectedFilterValue =
+    selectedFilter?.value !== null &&
+    selectedFilter?.value !== undefined &&
+    selectedFilter?.value !== '';
+
   function getLabel(): string {
     if (
       tableColumn?.type === 'status' ||
@@ -83,15 +88,13 @@ export function FilterSelection({
         <Badge
           className={cn(
             'bg-slate-300 text-slate-700 cursor-pointer hover:bg-slate-400 hover:text-slate-800',
-            selectedFilter?.value !== null &&
-              selectedFilter?.value !== undefined &&
-              selectedFilter?.value !== '' &&
+            hasSelectedFilterValue &&
               'bg-slate-800 text-slate-200 hover:bg-slate-900 hover:text-slate-100',
           )}
         >
           <Icon name={tableColumn?.icon} size={14} className="mr-1" />
           <span className="capitalize">{tableColumn?.name}</span>
-          {<span>: {getSelectedFilterValue()}</span>}
+          {hasSelectedFilterValue && <span>: {getSelectedFilterValue()}</span>}
         </Badge>
       </DropdownMenuTrigger>
 
