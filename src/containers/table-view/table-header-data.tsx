@@ -5,7 +5,7 @@ import { ArrowUp, Plus } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Icon } from '@/components/icon';
 
-import { useTableCustomColumnFormPanel, useTable } from '@/store';
+import { useTableCustomColumnFormPanel, useTable } from '@/stores';
 import { CustomField, Task } from '@/types';
 import {
   DropdownMenu,

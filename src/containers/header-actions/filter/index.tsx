@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Icon } from '@/components/icon';
 
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 import { Task } from '@/types';
 
 import { FilterActionButton } from './filter-action-button';

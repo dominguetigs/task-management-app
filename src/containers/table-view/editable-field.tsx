@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { useTasks } from '@/store';
+import { useTasks } from '@/stores';
 import { TableColumn, Task, TaskPriority, TaskStatus } from '@/types';
 import { Status } from '@/components/status';
 import { Priority } from '@/components/priority';

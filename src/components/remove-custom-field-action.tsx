@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useTable, useTasks } from '@/store';
+import { useTable, useTasks } from '@/stores';
 import { CustomField } from '@/types';
 
 import { Icon } from './icon';

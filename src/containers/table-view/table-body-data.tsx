@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { UpdateTaskAction } from '@/components/update-task-action';
 import { RemoveTaskAction } from '@/components/remove-task-action';
-import { useTable, useTasks } from '@/store';
+import { useTable, useTasks } from '@/stores';
 import { paginateTasks } from '@/utils';
 
 import { EditableField } from './editable-field';

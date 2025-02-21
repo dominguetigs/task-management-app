@@ -39,7 +39,7 @@ import {
 } from '@/components/ui/select';
 
 import { CUSTOM_FIELD_TYPES } from '@/constants';
-import { useTableCustomColumnFormPanel, useTable, useTasks } from '@/store';
+import { useTableCustomColumnFormPanel, useTable, useTasks } from '@/stores';
 import { CustomField } from '@/types';
 import { UUID } from '@/utils';
 

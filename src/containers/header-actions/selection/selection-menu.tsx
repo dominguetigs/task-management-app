@@ -18,7 +18,7 @@ import { Priority } from '@/components/priority';
 import { Status } from '@/components/status';
 
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
-import { useTable, useTasks } from '@/store';
+import { useTable, useTasks } from '@/stores';
 import { TaskPriority, TaskStatus } from '@/types';
 import { toastUndo } from '@/utils';
 

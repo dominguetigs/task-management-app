@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 interface SelectionButtonProps {
   selectedCount: number;

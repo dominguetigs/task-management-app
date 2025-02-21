@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useTasks } from '@/store';
+import { useTasks } from '@/stores';
 import { cn } from '@/lib/utils';
 import { toastRedo, toastUndo } from '@/utils';
 

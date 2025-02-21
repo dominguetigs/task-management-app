@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 export function SelectionAllButton() {
   const { rows, selectedAllRows, toggleSelectAll } = useTable();

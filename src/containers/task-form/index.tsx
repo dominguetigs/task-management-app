@@ -36,7 +36,7 @@ import {
 } from '@/components/ui/select';
 import { RemoveTaskAction } from '@/components/remove-task-action';
 
-import { useTaskFormPanel, useTasks } from '@/store';
+import { useTaskFormPanel, useTasks } from '@/stores';
 
 import { TASK_PRIORITY, TASK_STATUS } from '@/constants';
 import { Task, TaskPriority, TaskStatus } from '@/types';

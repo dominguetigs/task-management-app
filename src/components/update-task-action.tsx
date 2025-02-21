@@ -2,7 +2,7 @@
 
 import { Pencil } from 'lucide-react';
 
-import { useTaskFormPanel } from '@/store';
+import { useTaskFormPanel } from '@/stores';
 import { Task } from '@/types';
 
 interface UpdateTaskActionProps {

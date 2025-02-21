@@ -1,6 +1,6 @@
 'use client';
 
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 import { RemoveAction } from './remove-action';
 import { SelectionButton } from './selection-button';

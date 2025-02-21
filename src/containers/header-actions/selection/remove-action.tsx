@@ -1,7 +1,7 @@
 'use client';
 
 import { RemoveTaskAction } from '@/components/remove-task-action';
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 interface RemoveActionProps {
   selectedRowsIds: number[];

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/icon';
 import { Input } from '@/components/ui/input';
 
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 export default function Search() {
   const { search, setSearch, clearSelection } = useTable();

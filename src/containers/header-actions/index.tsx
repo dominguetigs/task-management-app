@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useTable, useTaskFormPanel } from '@/store';
+import { useTable, useTaskFormPanel } from '@/stores';
 
 import { Filter } from './filter';
 import { Selection } from './selection';

@@ -32,7 +32,7 @@ export default function RootLayout({
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
       />
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-dvh antialiased !p-8`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} min-h-dvh antialiased !p-6`}>
         {children}
         <Toaster />
       </body>

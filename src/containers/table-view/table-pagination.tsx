@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PAGE_SIZE_OPTIONS } from '@/constants';
-import { useTable } from '@/store';
+import { useTable } from '@/stores';
 
 export function TablePagination() {
   const tableRows = useTable(state => state.rows);
