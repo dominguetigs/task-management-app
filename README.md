@@ -7,10 +7,10 @@
   <a href="https://www.npmjs.com/" target="_blank">
     <img alt="NPM version" src="https://img.shields.io/badge/npm-v10.8.2-C53730?style=for-the-badge&logo=npm&logoColor=C53730">
   </a>
-  <a href="https://www.angular.io.com/" target="_blank">
+  <a href="https://nextjs.org/" target="_blank">
     <img alt="NextJS version" src="https://img.shields.io/badge/Next.js-15.1.7-000000?style=for-the-badge&logo=next.js&logoColor=white">
   </a>
-  <a href="https://www.angular.io.com/" target="_blank">
+  <a href="https://react.dev/" target="_blank">
     <img alt="ReactJS version" src="https://img.shields.io/badge/React-v19.0.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
   </a>
   <a href="https://www.linkedin.com/in/dominguetigs/" target="_blank">
