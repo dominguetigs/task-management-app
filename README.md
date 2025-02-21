@@ -70,7 +70,7 @@ The project was developed using the following technologies and libraries:
 
 <a id="project-structure"></a>
 
-## :folder: Project structure
+## :open_file_folder: Project structure
 
 ```
 /task-management-app
