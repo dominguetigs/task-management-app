@@ -153,7 +153,7 @@ This project is under the MIT license. See the [LICENSE](LICENSE.md) file for mo
 ---
 
 <h4 align="center">
-    Done with 💙 by <a
+    Made with 💙 by <a
       href="https://www.linkedin.com/in/dominguetigs/"
       target="_blank"
     >Gustavo Domingueti</a>
