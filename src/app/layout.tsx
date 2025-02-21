@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Task Management App',
-  description: 'A simple task management app built with NextJS/ReactJS and Zustand.',
+  description:
+    'A simple task management app built with NextJS/ReactJS, ShadcnUI, TailwindCSS and Zustand.',
 };
 
 export default function RootLayout({
