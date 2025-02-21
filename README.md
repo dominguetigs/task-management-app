@@ -18,22 +18,22 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="#about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#main-features">Main features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#bonus-features">Bonus features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#best-practices-and-tooling">Best Practices & Tooling</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#project-structure">Project structure</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#how-to-use">How to use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-</p>
-
 <h3 align="center">
   <a
     href="https://task-management-app-gt62.vercel.app/"
     target="_blank"
   >Access the demo</a>
 </h3>
+
+## Table of Contents
+
+- [About](#about)
+- [Main Features](#main-features)
+- [Bonus Features](#bonus-features)
+- [Technologies](#technologies)
+- [Best Practices & Tooling](#best-practices-and-tooling)
+- [Project Structure](#project-structure)
+- [How to Use](#how-to-use)
 
 <a id="about"></a>
 
