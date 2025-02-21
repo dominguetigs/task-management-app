@@ -66,7 +66,9 @@ export function TableCustomFieldForm() {
       })
       .refine(
         name => {
-          const columnNames = columns.map(column => column.name.toLowerCase());
+          const columnNames = columns
+            .filter(column => column.id !== data?.id)
+            .map(column => column.name.toLowerCase());
           return !columnNames.includes(name.toLowerCase());
         },
         {
@@ -75,13 +77,15 @@ export function TableCustomFieldForm() {
       ),
     type: z.union([z.literal('text'), z.literal('number'), z.literal('boolean')]),
     canInteract: z.boolean(),
-    // icon: z.any().optional().nullable(),
+    icon: z.any().optional().nullable(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: FORM_DEFAULT_VALUES,
   });
+
+  const watchedType = form.watch('type');
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const uuid = UUID();
@@ -132,7 +136,7 @@ export function TableCustomFieldForm() {
         id: data.id || FORM_DEFAULT_VALUES.id,
         name: data.name || FORM_DEFAULT_VALUES.name,
         type: data.type || FORM_DEFAULT_VALUES.type,
-        // icon: data.icon || FORM_DEFAULT_VALUES.icon,
+        icon: data.icon || FORM_DEFAULT_VALUES.icon,
         canInteract: true,
       });
     },
@@ -144,6 +148,20 @@ export function TableCustomFieldForm() {
       updateForm(data);
     }
   }, [data, form, updateForm]);
+
+  useEffect(() => {
+    const typeToIconMap: Record<string, string> = {
+      text: 'text',
+      number: 'hash',
+      boolean: 'check',
+    };
+
+    const selectedIcon = typeToIconMap[watchedType];
+
+    if (selectedIcon) {
+      form.setValue('icon', selectedIcon, { shouldValidate: true });
+    }
+  }, [watchedType, form]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
