@@ -66,7 +66,7 @@ export const useTable = create<TableStore>(set => ({
   selectedAllRows: false,
   search: '',
 
-  setSearch: search => set(() => ({ search: search.trim() })),
+  setSearch: search => set(() => ({ search })),
 
   toggleRowSelection: taskId =>
     set(state => {
