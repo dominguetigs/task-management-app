@@ -23,6 +23,7 @@
   <a href="#main-features">Main features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#bonus-features">Bonus features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#best-practices-and-tooling">Best Practices & Tooling</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#project-structure">Project structure</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#how-to-use">How to use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
@@ -74,6 +75,18 @@ The project was developed using the following technologies and libraries:
 - [ShadcnUI](https://ui.shadcn.com/)
 - [Zustand](https://zustand-demo.pmnd.rs/)
 - [TypeScript](https://www.typescriptlang.org/)
+
+<a id="best-practices-and-tooling"></a>
+
+## :white_check_mark: Best Practices & Tooling
+
+This project follows modern best practices to ensure code quality, consistency, and maintainability:
+
+- [Husky](https://typicode.github.io/husky/get-started.html) Automates pre-commit hooks to enforce standards before pushing changes.
+- [ESLint](https://eslint.org/) Ensures consistent code quality by identifying and fixing linting issues.
+- [Prettier](https://prettier.io/) Automatically formats code to maintain a uniform style.
+- [Commitlint](https://commitlint.js.org/) Enforces a standardized commit message format.
+- [Lint-staged](https://github.com/lint-staged/lint-staged) Runs linters on staged files before committing, ensuring only formatted and checked code is pushed.
 
 <a id="project-structure"></a>
 
