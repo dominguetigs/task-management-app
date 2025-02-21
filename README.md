@@ -21,6 +21,7 @@
 <p align="center">
   <a href="#about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#main-features">Main features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#bonus-features">Bonus features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#project-structure">Project structure</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#how-to-use">How to use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -37,11 +38,11 @@
 
 ## :bookmark: About
 
-The <strong>Task Management App</strong> is a web and mobile application designed to efficiently manage tasks in an organized way. With an intuitive design and powerful features, it allows users to create, edit, categorize, and track the progress of their tasks.
+This project is a Task Management App built with Next.js, React, TypeScript, and Zustand. It allows users to create, edit, categorize, and track tasks efficiently. The app was designed with a custom-built table view, dynamic filtering, and inline editing, providing a seamless user experience.
 
 <a id="main-features"></a>
 
-## :sparkles: Main features
+## :dart: Main features
 
 - _Task creation and editing_ with title, status, and priority selection.
 - _Inline editing_ available for all table columns except the ID column, allowing quick modifications directly in the table.
@@ -52,8 +53,14 @@ The <strong>Task Management App</strong> is a web and mobile application designe
 - _Custom fields support_ with text, number, and boolean types, enabling flexible task attributes.
 - _Column-based filtering_ with intelligent filtering based on column types, including default filters for title (task name), priority, and status.
 - _Custom field filtering_ automatically adapts to the field type (text, number, or boolean).
-- _Undo/Redo functionality_ available for certain task creation, editing, and deletion actions.
+
+<a id="bonus-features"></a>
+
+## :sparkles: Bonus features
+
+- _Micro-animations_ to enhance user experience, providing smooth transitions and feedback for actions like task updates, filtering, and pagination.
 - _Multi-select support_ in the table, allowing bulk actions such as mass deletion, bulk status updates, and priority changes.
+- _Undo/Redo functionality_ available for certain task creation, editing, and deletion actions.
 - _Global search_ field to quickly find tasks across the entire table.
 
 <a id="technologies"></a>
